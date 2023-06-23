@@ -13,7 +13,7 @@ add_executable(ctest main.c funs.c)
 add_subdirectory(collections)
 target_link_libraries(ctest PUBLIC collections)
 
-add_compile_options(-g3 -ggdb)
+add_compile_options(-Wall -g3 -ggdb -gdwarf-2 -pendantic)
 
 
 
