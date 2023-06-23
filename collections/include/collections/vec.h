@@ -88,12 +88,15 @@ typedef struct vec {
 
 #define vec_push(_self, val) \
     if (vec_length(_self) == vec_capacity(_self)) { /* if vec is at capacity */ \
-        printf("Realloc!"); \
         vec* _head = (vec*)(((size_t*)_self) - 2); \
-        _head = realloc(_head, sizeof(vec) + (2 * vec_length(_self))); \
+        _head = realloc(_head, sizeof(vec) + sizeof(typeof(val))*(2 * vec_capacity(_self))); \
         _head->capacity *= 2; \
         _head->length += 1; \
+        _self = (typeof(_self))(&(_head->capacity)+1); \
+        _self[_head->length - 1] = val; \
     } else { \
-        *((size_t*)(_self) - 2) += 1; \
-        _self[vec_length(_self) + 1] = val; \
-    }
+        vec* _head = (vec*)(((size_t*)_self) - 2); \
+        _head->length += 1; \
+        _self[_head->length - 1] = val; \
+    } \
+
