@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.26)
 
-project(ctest)
+project(c_collections)
 
 set(CMAKE_C_STANDARD 23)
 set(CMAKE_BUILD_TYPE Debug)
@@ -29,12 +29,12 @@ add_compile_options(-Wall
                     -Wanalyzer-write-to-const 
                     -Wanalyzer-write-to-string-literal)
 # -fanalyzer 
-add_executable(ctest main.c )
+add_executable(c_collections main.c )
 # target_include_directories(vector PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/vec/include)
 
 
 add_subdirectory(collections)
-target_link_libraries(ctest PUBLIC collections)
+target_link_libraries(c_collections PUBLIC collections)
 
 
 

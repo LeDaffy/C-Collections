@@ -15,6 +15,7 @@ size_t vec_size(void* arr);
 size_t vec_length(void* arr);
 vec* vec_head(void* arr);
 void vec_free(void* arr);
+void vec_pop(void* arr);
 size_t vec_capacity(void* arr);
 #define vec_iter(_self) \
     ({_self;})
