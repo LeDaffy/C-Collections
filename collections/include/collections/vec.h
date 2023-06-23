@@ -2,25 +2,6 @@
 #include <stdlib.h>
 
 
-#define generic(name) name ## _ ## int
-#define type int
-#include <collections/vec_imp.c>
-#undef generic
-#undef type
-
-#define generic(name) name ## _ ## double
-#define type double
-#include <collections/vec_imp.c>
-#undef generic
-#undef type
-
-
-typedef int* int_ptr;
-#define generic(name) name ## _ ## int_ptr
-#define type int_ptr
-#include <collections/vec_imp.c>
-#undef generic
-#undef type
 
 typedef struct vec {
     size_t length;
@@ -28,16 +9,23 @@ typedef struct vec {
 } vec;
 
 
-/**
- * type* vec_from(type*, size_t _capacity);
- */
+// Call directly
+void* vec_arr(vec* head);
+size_t vec_size(void* arr);
+size_t vec_length(void* arr);
+vec* vec_head(void* arr);
+void vec_free(void* arr);
+size_t vec_capacity(void* arr);
+
+// Call through macros
+__attribute__ ((malloc, malloc (vec_free))) 
+void* vec_impl_new(size_t capacity, size_t data_size);
 #define vec_new(_type, _capacity) \
 ({ \
-    vec* _self = malloc(sizeof(vec) + (sizeof(typeof(_type)) * _capacity)); \
-    _self->length = 0; \
-    _self->capacity = _capacity; \
-    (typeof(_type)) ((&(_self->capacity)) + 1); \
-})
+ vec_impl_new(_capacity, sizeof(_type)); \
+}) \
+
+
 
 /**
  * Used to pass comma separated arry into macro
@@ -62,41 +50,14 @@ typedef struct vec {
     (typeof(_type)) ((&(_self->capacity)) + 1); \
 })
 
-/**
- * void vec_free(arr* _self);
- */
-#define vec_free(self) \
-({ \
-    free((vec*)((size_t*)(self) - 2)); \
-})
+
 
 /**
- * size_t vec_length(arr* _self)
+ * void vec_push(type* arr, _val);
  */
-#define vec_length(_self) \
-({ \
- *(((size_t*)(_self)) - 2) ; \
-})
+void vec_impl_push(void** arr, size_t data_size);
+#define vec_push(_self, _val) \
+    vec_impl_push((void**)(&_self), sizeof(_val)); \
+    _self[vec_length(_self) - 1] = _val;
 
-/**
- * size_t vec_length(arr* _self)
- */
-#define vec_capacity(_self) \
-({ \
- *(((size_t*)(_self)) - 1) ; \
-})
-
-#define vec_push(_self, val) \
-    if (vec_length(_self) == vec_capacity(_self)) { /* if vec is at capacity */ \
-        vec* _head = (vec*)(((size_t*)_self) - 2); \
-        _head = realloc(_head, sizeof(vec) + sizeof(typeof(val))*(2 * vec_capacity(_self))); \
-        _head->capacity *= 2; \
-        _head->length += 1; \
-        _self = (typeof(_self))(&(_head->capacity)+1); \
-        _self[_head->length - 1] = val; \
-    } else { \
-        vec* _head = (vec*)(((size_t*)_self) - 2); \
-        _head->length += 1; \
-        _self[_head->length - 1] = val; \
-    } \
 
