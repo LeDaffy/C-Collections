@@ -1,6 +1,7 @@
 #include <collections/vec.h>
 
 #include <stdlib.h>
+#include <stdio.h>
 
 //void* vec_impl_new(size_t capacity, size_t data_size)
 void* vec_impl_new(size_t capacity, size_t data_size) 
@@ -13,56 +14,67 @@ void* vec_impl_new(size_t capacity, size_t data_size)
     return (void*)((&(head->capacity)) + 1);
 }
 
-vec* vec_head(void* arr) 
+vec* vec_head(void* buf) 
 {
-    return (vec*)(((size_t*)arr) - 2);
+    return (vec*)(((size_t*)buf) - 2);
 }
 
-void vec_pop(void* arr)
+void vec_pop(void* buf)
 {
-    vec_head(arr)->length -= 1;
+    vec_head(buf)->length -= 1;
 }
 
-void* vec_arr(vec* head) {
+void* vec_buf(vec* head) {
     return (void*)((&(head->capacity)) + 1);
 }
 
-void vec_free(void* arr)
+void vec_free(void* buf)
 {
-    free(vec_head(arr));
+    free(vec_head(buf));
 }
 
 
-size_t vec_size(void* arr) 
+size_t vec_size(void* buf) 
 {
-    return vec_head(arr)->length;
+    return vec_head(buf)->length;
 }
 
-size_t vec_length(void* arr) 
+size_t vec_length(void* buf) 
 {
-    return vec_head(arr)->length;
+    return vec_head(buf)->length;
 }
 
-size_t vec_capacity(void* arr) 
+size_t vec_capacity(void* buf) 
 {
-    return vec_head(arr)->capacity;
+    return vec_head(buf)->capacity;
 }
 
-void vec_impl_push(void** arr, size_t data_size)
+void vec_print(void* buf, void (*print)(void*), size_t data_size) 
 {
-    if (vec_size(*arr) == vec_capacity(*arr)) {
-        vec* head = vec_head(*arr);
+    vec* head = vec_head(buf);
+    printf("Size: %ld\tCapacity: %ld\t Buffer: {", head->length, head->capacity);
+    for (int i = 0; i < head->length; i++) {
+        (*print)(buf + (i * data_size));
+        printf(", ");
+    }
+    printf("}\n");
+}
+
+void vec_impl_push(void** buf, size_t data_size)
+{
+    if (vec_size(*buf) == vec_capacity(*buf)) {
+        vec* head = vec_head(*buf);
         
         /* reallocate vector twice the size */
-        head = realloc(head, sizeof(vec) + data_size*(2 * vec_capacity(*arr)));
+        head = realloc(head, sizeof(vec) + data_size*(2 * vec_capacity(*buf)));
         if (head == NULL) {abort();}
         head->capacity *= 2;
         head->length += 1;
 
 
-        *arr = vec_arr(head);
+        *buf = vec_buf(head);
     } else {
-        vec* head = vec_head(*arr);
+        vec* head = vec_head(*buf);
         head->length += 1;
     }
 }
