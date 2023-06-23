@@ -17,8 +17,8 @@ typedef struct p2d {
 void vec_print(int* arr) {
     vec* head = vec_head(arr);
     printf("Size: %ld Capacity: %ld Vals: {", head->length, head->capacity);
-    for (int i = 0; i < vec_length(arr); i++) {
-        printf("%d, ", arr[i]);
+    for (int* i = vec_iter(arr); i < vec_iter_end(arr); i++) {
+        printf("%d, ", *i);
     }
 
 
@@ -71,9 +71,6 @@ int main() {
     vec_push(decimals, 6.f);
     vec_print_f(decimals);
 
-    for (int i = 0; i < vec_length(numbers); i++) {
-        printf("%d, ", numbers[i]);
-    }
 
     printf("\n");
     return 0;

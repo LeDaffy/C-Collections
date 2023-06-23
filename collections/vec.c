@@ -18,6 +18,7 @@ vec* vec_head(void* arr)
     return (vec*)(((size_t*)arr) - 2);
 }
 
+
 void* vec_arr(vec* head) {
     return (void*)((&(head->capacity)) + 1);
 }
