@@ -57,8 +57,19 @@ int main() {
     vec_push(decimals, 6.f);
     vec_print(decimals, print_d, sizeof(int));
 
+    void __fnprint(void* buf) 
+    {
+        printf("[%d, %d]", ((int**)buf)[0][0], ((int**)buf)[0][1]);
+    }
+
+    int** arrs = vec_new(int[2], 1);
+    vec_push(arrs, P99_PROTECT((int[2]){1, 2}));
+    printf("[%d, %d]\n", arrs[0][0], arrs[0][1]);
+    vec_push(arrs, P99_PROTECT((int[2]){3, 4}));
+    vec_push(arrs, P99_PROTECT((int[2]){5, 6}));
 
 
+    vec_print(arrs, __fnprint, sizeof(int[2]));
 
     printf("\n");
     vec_free(decimals);
