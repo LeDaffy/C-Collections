@@ -13,7 +13,7 @@
 
 
 #include <stdlib.h>
-
+#include <stddef.h>
 
 
 typedef struct vec {
@@ -58,17 +58,10 @@ void* vec_impl_new(size_t capacity, size_t data_size);
 /**
  * type* vec_from(type*, type[] _arr, size_t _length);
  */
-#define vec_from(_type, _arr, _length) \
+void* vec_impl_from(void* buf, size_t length, size_t data_size);
+#define vec_from(_arr, _length) \
 ({ \
-    vec* _self = malloc(sizeof(vec) + (sizeof(typeof(_type)) * _length)); \
-    _self->length = _length; \
-    _self->capacity = _length; \
-    auto _temp = (typeof(_type)) ((&(_self->capacity)) + 1); \
-    for (int i = 0; i < _length; i++) \
-    { \
-     _temp[i] = _arr[i]; \
-    } \
-    (typeof(_type)) ((&(_self->capacity)) + 1); \
+    vec_impl_from(_arr, _length, sizeof(_arr[0])); \
 })
 
 

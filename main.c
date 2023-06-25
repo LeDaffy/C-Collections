@@ -15,12 +15,17 @@ int main() {
 
 
     // Vector of ints
-    int* numbers = vec_new(int, 1);
-
+    //int* numbers = vec_new(int, 1);
+    //int* numbers = vec_impl_from((int[3]){100, 100, 100}, 3, sizeof(int));
     // Nested function (GCC only)
     void print_int(void* num) {
        printf("%d", *((int*)num));
     }
+
+    int* numbers = vec_from(P99_PROTECT((int[3]){100, 100, 100}), 3);
+    vec_print(numbers, print_int, sizeof(int));
+    vec_pop(numbers);
+    vec_print(numbers, print_int, sizeof(int));
 
     vec_push(numbers, 1);
     vec_print(numbers, print_int, sizeof(int));
