@@ -104,6 +104,11 @@ int main() {
     printf("%s\n", my_string);
 
 
+
+    char* file_string = dstr_from_file("../main.c");
+    printf("%s\n Length: %ld\n", file_string, dstr_head(file_string)->length);
+
+
     vec_free(decimals);
     vec_free(numbers);
     vec_free(arrs);
