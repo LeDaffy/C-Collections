@@ -29,42 +29,43 @@ void* vec_impl_from(void* buf, size_t length, size_t data_size)
 
 }
 
-vec* vec_head(void* buf) 
+vec* vec_head(const void* const buf)
 {
     return (vec*)(((size_t*)buf) - 2);
 }
 
-void vec_pop(void* buf)
+void vec_pop(const void* const buf)
 {
     vec_head(buf)->length -= 1;
 }
 
-void* vec_buf(vec* head) {
+void* vec_buf(const vec* const head)
+{
     return (void*)((&(head->capacity)) + 1);
 }
 
-void vec_free(void* buf)
+void vec_free(const void* const buf)
 {
     free(vec_head(buf));
 }
 
 
-size_t vec_size(void* buf) 
+size_t vec_size(const void* const buf)
 {
     return vec_head(buf)->length;
 }
 
-size_t vec_length(void* buf) 
+size_t vec_length(const void* const buf)
 {
     return vec_head(buf)->length;
 }
 
-size_t vec_capacity(void* buf) 
+size_t vec_capacity(const void* const buf)
 {
     return vec_head(buf)->capacity;
 }
 
-void vec_print(void* buf, void (*print)(void*), size_t data_size) 
+void vec_print(void* buf, void (*print)(void*), const size_t data_size)
 {
     vec* head = vec_head(buf);
     printf("Size: %ld\tCapacity: %ld\t Buffer: {", head->length, head->capacity);
