@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #include <collections/vec.h>
+#include <collections/d_string.h>
 
 /**
  * main.c:
@@ -22,7 +23,7 @@ int main() {
        printf("%d", *((int*)num));
     }
 
-    int* numbers = vec_from(P99_PROTECT((int[3]){100, 100, 100}), 3);
+    int* const numbers = vec_from(P99_PROTECT((int[3]){100, 100, 100}), 3);
     vec_print(numbers, print_int, sizeof(int));
     vec_pop(numbers);
     vec_print(numbers, print_int, sizeof(int));
@@ -95,12 +96,19 @@ int main() {
 
 
 
+
     printf("\n");
+    char* my_string = dstr_new_nt("Hello world\0");
+    printf("%s\n", my_string);
+    dstr_cat_nt(&my_string, " The quick brown fox jumped over the lazer dog 100 times\n\0");
+    printf("%s\n", my_string);
+
+
     vec_free(decimals);
     vec_free(numbers);
     vec_free(arrs);
-
-
+    dstr_free(my_string);
+    printf("Program ending\n");
     return 0;
 }
 
