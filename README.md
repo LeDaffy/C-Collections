@@ -1,5 +1,5 @@
 # C Collections
-Type generic GNU C functions and macros
+GNU C23 functions and macros for collections listed below.
 
 ## Collections
 - Vector
